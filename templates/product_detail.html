@@ -1,0 +1,50 @@
+product_detail_html = r'''
+{% extends "base.html" %}
+{% set categories = categories %}
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <img src="{{ product.image_url }}" class="img-fluid rounded-4 shadow-sm w-100" alt="{{ product.name }}">
+      </div>
+      <div class="col-lg-6">
+        <h2 class="fw-bold">{{ product.name }}</h2>
+        <div class="text-muted mb-2">القسم: <a href="{{ url_for('category', slug=product.category.slug) }}">{{ product.category.name }}</a></div>
+        <div class="h3 text-primary fw-bold mb-3">{{ '%.2f'|format(product.price) }}$</div>
+        <p class="lead">{{ product.description }}</p>
+
+        <div class="d-grid gap-2 mt-4">
+          <a class="btn btn-lg btn-primary" href="{{ product.affiliate_url }}" target="_blank" rel="noopener">اشترِ الآن</a>
+          <a class="btn btn-lg btn-outline-secondary" href="javascript:history.back()">رجوع</a>
+        </div>
+
+        <div class="mt-4 small text-muted">
+          قد نحصل على عمولة من عمليات الشراء عبر الرابط (Affiliate).
+        </div>
+      </div>
+    </div>
+
+    {% if related %}
+    <hr class="my-5">
+    <h4 class="fw-bold mb-3">منتجات ذات صلة</h4>
+    <div class="row g-3">
+      {% for p in related %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <a class="card h-100 text-decoration-none" href="{{ url_for('product_detail', slug=p.slug) }}">
+          <img src="{{ p.image_url }}" class="card-img-top" alt="{{ p.name }}">
+          <div class="card-body">
+            <div class="small text-muted">{{ p.category.name }}</div>
+            <div class="fw-semibold text-dark two-lines">{{ p.name }}</div>
+            <div class="fw-bold text-primary">{{ '%.2f'|format(p.price) }}$</div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+'''
+open(os.path.join(templates_dir, "product_detail.html"), "w").write(product_detail_html.strip()+"\n")

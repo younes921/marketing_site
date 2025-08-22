@@ -1,0 +1,84 @@
+index_html = r'''
+{% extends "base.html" %}
+{% set categories = categories %}
+{% block content %}
+<section class="hero py-5 bg-gradient">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <h1 class="display-5 fw-bold mb-3">أهلاً بك في <span class="text-primary">ShopX</span></h1>
+        <p class="lead text-muted">اكتشف منتجات حصرية مختارة بعناية، عروض قوية، وتجربة تسوق سريعة—على طريقة الكبار مثل أمازون وعلي بابا.</p>
+        <form class="d-flex mt-4" method="get" action="{{ url_for('search') }}">
+          <input class="form-control form-control-lg me-2" type="search" name="q" placeholder="إبحث عن هاتف، سماعات، ملابس..." value="{{ q or '' }}">
+          <button class="btn btn-lg btn-primary" type="submit">ابحث الآن</button>
+        </form>
+      </div>
+      <div class="col-lg-5 mt-4 mt-lg-0">
+        <div class="hero-card shadow-lg rounded-4 p-4 bg-white">
+          <h5 class="fw-bold mb-3">منتجات حصرية اليوم</h5>
+          <div class="row g-3">
+            {% for p in featured %}
+            <div class="col-6">
+              <a class="card h-100 text-decoration-none" href="{{ url_for('product_detail', slug=p.slug) }}">
+                <img src="{{ p.image_url }}" class="card-img-top rounded-top-4" alt="{{ p.name }}">
+                <div class="card-body p-2">
+                  <div class="small text-muted">{{ p.category.name }}</div>
+                  <div class="fw-semibold text-dark small two-lines">{{ p.name }}</div>
+                  <div class="fw-bold text-primary">{{ '%.2f'|format(p.price) }}$</div>
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="fw-bold">الأقسام</h3>
+      <a href="#" class="link-primary small">عرض الكل</a>
+    </div>
+    <div class="row g-3">
+      {% for c in categories %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="{{ url_for('category', slug=c.slug) }}" class="card card-cat text-decoration-none h-100">
+          <div class="card-body">
+            <div class="fw-bold">{{ c.name }}</div>
+            <div class="small text-muted two-lines">{{ c.description or '' }}</div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="fw-bold">أحدث المنتجات</h3>
+      <a href="{{ url_for('search') }}" class="link-primary small">تصفح أكثر</a>
+    </div>
+    <div class="row g-3">
+      {% for p in latest %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <a class="card h-100 text-decoration-none" href="{{ url_for('product_detail', slug=p.slug) }}">
+          <img src="{{ p.image_url }}" class="card-img-top" alt="{{ p.name }}">
+          <div class="card-body">
+            <div class="small text-muted">{{ p.category.name }}</div>
+            <div class="fw-semibold text-dark two-lines">{{ p.name }}</div>
+            <div class="fw-bold text-primary">{{ '%.2f'|format(p.price) }}$</div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+'''
+open(os.path.join(templates_dir, "index.html"), "w").write(index_html.strip()+"\n")
