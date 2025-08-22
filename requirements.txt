@@ -4,3 +4,4 @@ Flask-Migrate
 Flask-WTF
 WTForms
 python-slugify==8.0.4
+gunicorn
